@@ -38,7 +38,7 @@
 #define CONFIGURATION_H_VERSION 02000902
 
 #define ANYCUBIC_TOUCHSCREEN
-#if DISABLED(KNUTWURST_4MAXP2)
+#if NONE(KNUTWURST_4MAX, KNUTWURST_4MAXP2)
   #define ANYCUBIC_FILAMENT_RUNOUT_SENSOR
 #endif
 #define KNUTWURST_SPECIAL_MENU
@@ -85,7 +85,7 @@
  * this has to be enabled to alter the motherboard
  * configuration for the 4MAX printer family
  */
-#if ENABLED(KNUTWURST_4MAXP2)
+#if EITHER(KNUTWURST_4MAX, KNUTWURST_4MAXP2)
   #define ANYCUBIC_4_MAX_PRO_ENDSTOPS
 #endif
 
@@ -581,7 +581,7 @@
  *   999 : Dummy Table that ALWAYS reads 100°C or the temperature defined below.
  *
  */
-#if ENABLED(KNUTWURST_4MAXP2)
+#if EITHER(KNUTWURST_4MAX, KNUTWURST_4MAXP2)
   #define TEMP_SENSOR_0 1
 #else
   #define TEMP_SENSOR_0 5
@@ -713,6 +713,12 @@
     #define DEFAULT_Kd 106.55
   #endif
 
+  #if ENABLED(KNUTWURST_4MAX)
+    #define  DEFAULT_Kp 22.2
+    #define  DEFAULT_Ki 1.08
+    #define  DEFAULT_Kd 114
+  #endif
+
   #if ENABLED(KNUTWURST_4MAXP2)
     #define DEFAULT_Kp 17.13
     #define DEFAULT_Ki 0.93
@@ -772,7 +778,7 @@
     #define DEFAULT_bedKd 1675.16
   #endif
 
-  #if ENABLED(KNUTWURST_4MAXP2)
+  #if ANY(KNUTWURST_4MAX, KNUTWURST_4MAXP2)
     #define DEFAULT_bedKp 251.78
     #define DEFAULT_bedKi 49.57
     #define DEFAULT_bedKd 319.73
@@ -970,15 +976,11 @@
   //#define ENDSTOPPULLDOWN_ZMIN_PROBE
 #endif
 
-#if ANY(KNUTWURST_MEGA, KNUTWURST_MEGA_S, KNUTWURST_MEGA_P, KNUTWURST_4MAXP2)
+#if ANY(KNUTWURST_MEGA, KNUTWURST_MEGA_S, KNUTWURST_MEGA_P, KNUTWURST_4MAX, KNUTWURST_4MAXP2)
   // Mechanical endstop with COM to ground and NC to Signal uses "false" here (most common setup).
   #define X_MIN_ENDSTOP_INVERTING true  // Set to true to invert the logic of the endstop.
   #define Y_MIN_ENDSTOP_INVERTING true  // Set to true to invert the logic of the endstop.
-  #if BOTH(KNUTWURST_BLTOUCH, KNUTWURST_4MAXP2)
-      #define Z_MIN_ENDSTOP_INVERTING false  // Set to true to invert the logic of the endstop.
-  #else
-      #define Z_MIN_ENDSTOP_INVERTING true  // Set to true to invert the logic of the endstop.
-  #endif
+  #define Z_MIN_ENDSTOP_INVERTING true  // Set to true to invert the logic of the endstop.
   #define I_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
   #define J_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
   #define K_MIN_ENDSTOP_INVERTING false // Set to true to invert the logic of the endstop.
@@ -1041,11 +1043,12 @@
  * :['A4988', 'A5984', 'DRV8825', 'LV8729', 'L6470', 'L6474', 'POWERSTEP01', 'TB6560', 'TB6600', 'TMC2100', 'TMC2130', 'TMC2130_STANDALONE', 'TMC2160', 'TMC2160_STANDALONE', 'TMC2208', 'TMC2208_STANDALONE', 'TMC2209', 'TMC2209_STANDALONE', 'TMC26X', 'TMC26X_STANDALONE', 'TMC2660', 'TMC2660_STANDALONE', 'TMC5130', 'TMC5130_STANDALONE', 'TMC5160', 'TMC5160_STANDALONE']
  */
 #if ENABLED(KNUTWURST_TMC)
-  #define X_DRIVER_TYPE  TMC2208_STANDALONE
-  #define Y_DRIVER_TYPE  TMC2208_STANDALONE
-  #define Z_DRIVER_TYPE  TMC2208_STANDALONE
-  #define E0_DRIVER_TYPE TMC2208_STANDALONE
-  #define E1_DRIVER_TYPE TMC2208_STANDALONE
+  #define X_DRIVER_TYPE  TMC2209_STANDALONE
+  #define Y_DRIVER_TYPE  TMC2209_STANDALONE
+  #define Z_DRIVER_TYPE  TMC2209_STANDALONE
+  #define Z2_DRIVER_TYPE TMC2209_STANDALONE
+  #define E0_DRIVER_TYPE A4988
+  #define E1_DRIVER_TYPE A4988
 #else
   #if ENABLED(KNUTWURST_MEGA_P)
     #define X_DRIVER_TYPE  TMC2208_STANDALONE
@@ -1110,7 +1113,7 @@
 #endif
 
 #if ENABLED(KNUTWURST_MEGA_S)
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 384, 384 }
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 384, 384 } 
 #endif
 
 #if ENABLED(KNUTWURST_MEGA_X)
@@ -1123,6 +1126,10 @@
 
 #if ENABLED(KNUTWURST_CHIRON)
   #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 100, 400, 415 }
+#endif
+
+#if ENABLED(KNUTWURST_4MAX)
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 100, 80, 800, 415 }
 #endif
 
 #if ENABLED(KNUTWURST_4MAXP2)
@@ -1148,9 +1155,9 @@
 
 #if ENABLED(KNUTWURST_MEGA_X)
   #if ENABLED(KNUTWURST_BMG)
-    #define DEFAULT_MAX_FEEDRATE            { 120, 120, 12, 30 } // correct for BMG?
+    #define DEFAULT_MAX_FEEDRATE            { 120, 120, 18, 30 } // correct for BMG?
   #else
-    #define DEFAULT_MAX_FEEDRATE            { 120, 120, 12, 80 } // thanks to Simon Geis
+    #define DEFAULT_MAX_FEEDRATE            { 120, 120, 18, 80 } // thanks to Simon Geis
   #endif
 #endif
 
@@ -1166,8 +1173,12 @@
   #endif
 #endif
 
+#if ENABLED(KNUTWURST_4MAX)
+  #define DEFAULT_MAX_FEEDRATE          { 150, 150, 25, 80 }
+#endif
+
 #if ENABLED(KNUTWURST_4MAXP2)
-  #define DEFAULT_MAX_FEEDRATE          { 150, 150, 18, 30 }
+  #define DEFAULT_MAX_FEEDRATE          { 150, 150, 25, 30 }
 #endif
 
 
@@ -1195,6 +1206,10 @@
  #define DEFAULT_MAX_ACCELERATION      { 350, 350, 50, 20000 }
 #endif
 
+#if ENABLED(KNUTWURST_4MAX)
+ #define DEFAULT_MAX_ACCELERATION      { 1500, 1500, 100, 10000 }
+#endif
+
 #if ENABLED(KNUTWURST_4MAXP2)
  #define DEFAULT_MAX_ACCELERATION      { 1500, 1500, 70, 15000 }
 #endif
@@ -1202,7 +1217,7 @@
 
 //#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
-  #define MAX_ACCEL_EDIT_VALUES       { 6000, 6000, 200, 20000 } // ...or, set your own edit limits
+  #define MAX_ACCEL_EDIT_VALUES       { 6000, 6000, 200, 20000, 20000 } // ...or, set your own edit limits
 #endif
 
 /**
@@ -1249,6 +1264,12 @@
   #define DEFAULT_TRAVEL_ACCELERATION   350    // X, Y, Z acceleration for travel (non printing) moves
 #endif
 
+#if ENABLED(KNUTWURST_4MAX)
+  #define DEFAULT_ACCELERATION          1500    // X, Y, Z and E acceleration for printing moves
+  #define DEFAULT_RETRACT_ACCELERATION  1500    // E acceleration for retracts
+  #define DEFAULT_TRAVEL_ACCELERATION   1800    // X, Y, Z acceleration for travel (non printing) moves
+#endif
+
 #if ENABLED(KNUTWURST_4MAXP2)
   #define DEFAULT_ACCELERATION          800    // X, Y, Z and E acceleration for printing moves
   #define DEFAULT_RETRACT_ACCELERATION  1500    // E acceleration for retracts
@@ -1285,7 +1306,7 @@
     #define DEFAULT_ZJERK  0.4
   #endif
 
-  #if ENABLED(KNUTWURST_4MAXP2)
+  #if ANY(KNUTWURST_4MAX, KNUTWURST_4MAXP2)
     #define DEFAULT_XJERK  8.0
     #define DEFAULT_YJERK  8.0
     #define DEFAULT_ZJERK  0.2
@@ -1321,7 +1342,7 @@
     #define JUNCTION_DEVIATION_MM 0.018 // (mm) Distance from real junction edge
   #endif
 
-  #if ENABLED(KNUTWURST_4MAXP2)
+  #if EITHER(KNUTWURST_4MAX, KNUTWURST_4MAXP2)
     #define JUNCTION_DEVIATION_MM 0.016 // (mm) Distance from real junction edge
   #endif
 
@@ -1353,9 +1374,7 @@
  * The probe replaces the Z-MIN endstop and is used for Z homing.
  * (Automatically enables USE_PROBE_FOR_Z_HOMING.)
  */
-#if BOTH(KNUTWURST_BLTOUCH, KNUTWURST_4MAXP2)
-  #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
-#endif
+//#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
 
 // Force the use of the probe for Z-axis homing
 //#define USE_PROBE_FOR_Z_HOMING
@@ -1511,7 +1530,7 @@
  *     O-- FRONT --+
  */
 #if ENABLED(KNUTWURST_BLTOUCH)
-  #define NOZZLE_TO_PROBE_OFFSET { -1.5, -27.5, -1.34 } //https://www.thingiverse.com/thing:2824005
+  #define NOZZLE_TO_PROBE_OFFSET { -1.5, -27.5, -1.3 } //https://www.thingiverse.com/thing:2824005
   //#define NOZZLE_TO_PROBE_OFFSET { 29, -15, 0 } //X-Carriage
 #endif
 
@@ -1530,7 +1549,7 @@
 #if ENABLED(KNUTWURST_CHIRON)
   #define PROBING_MARGIN 15
 #else
-  #define PROBING_MARGIN 35
+  #define PROBING_MARGIN 30
 #endif
 
 // X and Y axis travel speed (mm/m) between probes
@@ -1595,7 +1614,8 @@
  * Example: `M851 Z-5` with a CLEARANCE of 4  =>  9mm from bed to nozzle.
  *     But: `M851 Z+1` with a CLEARANCE of 2  =>  2mm from bed to nozzle.
  */
-#define Z_CLEARANCE_DEPLOY_PROBE   20 // Z Clearance for Deploy/Stow
+//#define Z_CLEARANCE_DEPLOY_PROBE   20 // Z Clearance for Deploy/Stow
+#define Z_CLEARANCE_DEPLOY_PROBE   10 // No need to go that high
 #define Z_CLEARANCE_BETWEEN_PROBES  5 // Z Clearance between probe points
 #define Z_CLEARANCE_MULTI_PROBE     5 // Z Clearance between multiple probes
 //#define Z_AFTER_PROBING           5 // Z position after probing is done
@@ -1603,8 +1623,8 @@
 #define Z_PROBE_LOW_POINT          -12 // Farthest distance below the trigger-point to go before stopping
 
 // For M851 give a range for adjusting the Z probe offset
-#define Z_PROBE_OFFSET_RANGE_MIN -50
-#define Z_PROBE_OFFSET_RANGE_MAX 50
+#define Z_PROBE_OFFSET_RANGE_MIN -30
+#define Z_PROBE_OFFSET_RANGE_MAX 30
 
 // Enable the M48 repeatability test to test probe accuracy
 #if ENABLED(KNUTWURST_BLTOUCH)
@@ -1743,6 +1763,29 @@
     #define INVERT_E7_DIR false
   #endif
 
+  #if ENABLED(KNUTWURST_4MAX)
+    // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
+    #define INVERT_X_DIR false // set to true for stock drivers or TMC2208 with reversed connectors
+    #define INVERT_Y_DIR false // set to false for stock drivers or TMC2208 with reversed connectors
+    #define INVERT_Z_DIR false // set to false for stock drivers or TMC2208 with reversed connectors
+
+    // @section extruder
+
+    // For direct drive extruder v9 set to true, for geared extruder set to false.
+    #if ENABLED(KNUTWURST_BMG)
+      #define INVERT_E0_DIR false // set to false for stock drivers or TMC2208 with reversed connectors
+    #else
+      #define INVERT_E0_DIR true // set to false for stock drivers or TMC2208 with reversed connectors
+    #endif
+    #define INVERT_E1_DIR false // set to false for stock drivers or TMC2208 with reversed connectors
+    #define INVERT_E2_DIR false
+    #define INVERT_E3_DIR false
+    #define INVERT_E4_DIR false
+    #define INVERT_E5_DIR false
+    #define INVERT_E6_DIR false
+    #define INVERT_E7_DIR false
+  #endif
+
   #if ENABLED(KNUTWURST_4MAXP2)
     // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
     #define INVERT_X_DIR false // set to true for stock drivers or TMC2208 with reversed connectors
@@ -1840,6 +1883,29 @@
     #define INVERT_E7_DIR false
   #endif
 
+  #if ENABLED(KNUTWURST_4MAX)
+    // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
+    #define INVERT_X_DIR true // set to true for stock drivers or TMC2208 with reversed connectors
+    #define INVERT_Y_DIR true // set to false for stock drivers or TMC2208 with reversed connectors
+    #define INVERT_Z_DIR true // set to false for stock drivers or TMC2208 with reversed connectors
+
+    // @section extruder
+
+    // For direct drive extruder v9 set to true, for geared extruder set to false.
+    #if ENABLED(KNUTWURST_BMG)
+      #define INVERT_E0_DIR true // set to false for stock drivers or TMC2208 with reversed connectors
+    #else
+      #define INVERT_E0_DIR false // set to false for stock drivers or TMC2208 with reversed connectors
+    #endif
+    #define INVERT_E1_DIR true // set to false for stock drivers or TMC2208 with reversed connectors
+    #define INVERT_E2_DIR false
+    #define INVERT_E3_DIR false
+    #define INVERT_E4_DIR false
+    #define INVERT_E5_DIR false
+    #define INVERT_E6_DIR false
+    #define INVERT_E7_DIR false
+  #endif
+
   #if ENABLED(KNUTWURST_4MAXP2)
     // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
     #define INVERT_X_DIR false // set to true for stock drivers or TMC2208 with reversed connectors
@@ -1916,7 +1982,7 @@
   #define X_MIN_POS 0
   #define Y_MIN_POS 0
   #define Z_MIN_POS 0
-  #define X_BED_SIZE 220
+  #define X_BED_SIZE 225
   #define Y_BED_SIZE 220
   #define Z_MAX_POS 210
   #define X_MAX_POS X_BED_SIZE
@@ -1943,6 +2009,17 @@
   #define Z_MAX_POS 455
   #define X_MAX_POS X_BED_SIZE +10
   #define Y_MAX_POS Y_BED_SIZE +10
+#endif
+
+#if ENABLED(KNUTWURST_4MAX)
+#define X_MIN_POS -5
+  #define Y_MIN_POS 0
+  #define Z_MIN_POS 0
+  #define X_BED_SIZE 210
+  #define Y_BED_SIZE 210
+  #define Z_MAX_POS 300
+  #define X_MAX_POS X_BED_SIZE
+  #define Y_MAX_POS Y_BED_SIZE
 #endif
 
 #if ENABLED(KNUTWURST_4MAXP2)
@@ -1977,7 +2054,7 @@
 #if ENABLED(MIN_SOFTWARE_ENDSTOPS)
   #define MIN_SOFTWARE_ENDSTOP_X
   #define MIN_SOFTWARE_ENDSTOP_Y
-  //#define MIN_SOFTWARE_ENDSTOP_Z  // Disabled for BLTouch
+  #define MIN_SOFTWARE_ENDSTOP_Z
   #define MIN_SOFTWARE_ENDSTOP_I
   #define MIN_SOFTWARE_ENDSTOP_J
   #define MIN_SOFTWARE_ENDSTOP_K
@@ -1995,7 +2072,7 @@
 #endif
 
 #if EITHER(MIN_SOFTWARE_ENDSTOPS, MAX_SOFTWARE_ENDSTOPS)
-  //#define SOFT_ENDSTOPS_MENU_ITEM  // Enable/Disable software endstops from the LCD
+  #define SOFT_ENDSTOPS_MENU_ITEM  // Enable/Disable software endstops from the LCD
 #endif
 
 /**
@@ -2137,7 +2214,7 @@
 /**
  * Auto-leveling needs preheating
  */
-//#define PREHEAT_BEFORE_LEVELING
+#define PREHEAT_BEFORE_LEVELING
 #if ENABLED(PREHEAT_BEFORE_LEVELING)
   #define LEVELING_NOZZLE_TEMP 120   // (°C) Only applies to E0 at this time
   #define LEVELING_BED_TEMP     50
@@ -2148,7 +2225,7 @@
  * Turn on with the command 'M111 S32'.
  * NOTE: Requires a lot of PROGMEM!
  */
-#define DEBUG_LEVELING_FEATURE
+//#define DEBUG_LEVELING_FEATURE
 
 #if ENABLED(KNUTWURST_DEBUG)
   #define DEBUG_LEVELING_FEATURE
@@ -2165,7 +2242,7 @@
   // The height can be set with M420 Z<height>
   #define ENABLE_LEVELING_FADE_HEIGHT
   #if ENABLED(ENABLE_LEVELING_FADE_HEIGHT)
-    #define DEFAULT_LEVELING_FADE_HEIGHT 0.96 // (mm) Default fade height.
+    #define DEFAULT_LEVELING_FADE_HEIGHT 5.0 // (mm) Default fade height. edmunds
   #endif
 
   // For Cartesian machines, instead of dividing moves on mesh boundaries,
@@ -2185,7 +2262,7 @@
     #define MESH_TEST_BED_TEMP      60    // (°C) Default bed temperature for G26.
     #define G26_XY_FEEDRATE         20    // (mm/s) Feedrate for G26 XY moves.
     #define G26_XY_FEEDRATE_TRAVEL 100    // (mm/s) Feedrate for G26 XY travel moves.
-    #define G26_RETRACT_MULTIPLIER   6.0  // G26 Q (retraction) used by default between mesh test elements.
+    #define G26_RETRACT_MULTIPLIER   6.0  // G26 Q (retraction) used by default between mesh test elements. edmunds
   #endif
 
 #endif
@@ -2193,7 +2270,7 @@
 #if EITHER(AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_BILINEAR)
 
   // Set the number of grid points per dimension.
-  #define GRID_MAX_POINTS_X 5
+  #define GRID_MAX_POINTS_X 7
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   // Probe along the Y axis, advancing X after each column
@@ -2203,7 +2280,7 @@
 
     // Beyond the probed grid, continue the implied tilt?
     // Default is to maintain the height of the nearest edge.
-    //#define EXTRAPOLATE_BEYOND_GRID
+    #define EXTRAPOLATE_BEYOND_GRID
 
     //
     // Experimental Subdivision of the grid by Catmull-Rom method.
@@ -2268,7 +2345,7 @@
 #if ENABLED(LCD_BED_LEVELING)
   #define MESH_EDIT_Z_STEP  0.025 // (mm) Step size while manually probing Z axis.
   #define LCD_PROBE_Z_RANGE 4     // (mm) Z Range centered on Z_MIN_POS for LCD Z adjustment
-  //#define MESH_EDIT_MENU        // Add a menu to edit mesh points
+  #define MESH_EDIT_MENU        // Add a menu to edit mesh points
 #endif
 
 // Add a menu item to move between bed corners for manual bed adjustment
@@ -2333,10 +2410,7 @@
  * - Allows Z homing only when XY positions are known and trusted.
  * - If stepper drivers sleep, XY homing may be required again before Z homing.
  */
-#if BOTH(KNUTWURST_BLTOUCH, KNUTWURST_4MAXP2)
-  #define Z_SAFE_HOMING
-#endif
-
+//#define Z_SAFE_HOMING
 
 #if ENABLED(Z_SAFE_HOMING)
   #define Z_SAFE_HOMING_X_POINT X_CENTER  // X point for Z homing
@@ -2358,7 +2432,7 @@
   #define HOMING_FEEDRATE_MM_M { (30*60), (30*60), (6*60) }
 #endif
 
-#if ENABLED(KNUTWURST_4MAXP2)
+#if EITHER(KNUTWURST_4MAX, KNUTWURST_4MAXP2)
   // Homing speeds (mm/m)
   #define HOMING_FEEDRATE_MM_M { (40*60), (40*60), (4*60) }
 #endif

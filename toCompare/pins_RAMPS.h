@@ -155,8 +155,7 @@
 #ifndef E0_CS_PIN
   #define E0_CS_PIN                           42
 #endif
-/*if Mega_S_MM begin*/
-/*
+/* edmunds:
 #ifndef E1_STEP_PIN
   #define E1_STEP_PIN                         36
 #endif
@@ -182,7 +181,6 @@
 #ifndef E1_CS_PIN
   #define E1_CS_PIN                           42
 #endif
-/*Mega_S_MM end*/
 
 //
 // Temperature Sensors
@@ -281,19 +279,14 @@
   #define FILWIDTH_PIN                         5  // Analog Input on AUX2
 #endif
 
-/*if Mega_S_MM begin*/
-/*
-#ifndef POWER_OFF_PIN
-  #define POWER_OFF_PIN                       21
-#endif
-*/
-/*end Mega_S_MM*/
+//#ifndef POWER_OFF_PIN
+//  #define POWER_OFF_PIN                       21  //what is a power off pin?
+//#endif
+
 // RAMPS 1.4 DIO 4 on the servos connector
 #ifndef FIL_RUNOUT_PIN
   #define FIL_RUNOUT_PIN                       4
-/*if Mega_S_MM begin*/
-  #define FIL_RUNOUT1_PIN                     21  //SCL pin on I2C header on trigorilla
-/*end Mega_S_MM*/
+  #define FIL_RUNOUT1_PIN                      21  //SCL pin on trigorilla
 #endif
 
 #ifndef PS_ON_PIN
