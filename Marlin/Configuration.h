@@ -696,9 +696,9 @@
                                   // Set/get with gcode: M301 E[extruder number, 0-2]
 
   #if ANY(KNUTWURST_MEGA, KNUTWURST_MEGA_S, KNUTWURST_MEGA_P)
-    #define  DEFAULT_Kp  9.02
-    #define  DEFAULT_Ki  0.32
-    #define  DEFAULT_Kd 42.76
+    #define  DEFAULT_Kp  14.00
+    #define  DEFAULT_Ki   0.81
+    #define  DEFAULT_Kd  60.79
   #endif
 
   #if ENABLED(KNUTWURST_MEGA_X)
@@ -755,9 +755,9 @@
   //#define PID_BED_DEBUG // Sends debug data to the serial port.
 
   #if ANY(KNUTWURST_MEGA, KNUTWURST_MEGA_S, KNUTWURST_MEGA_P)
-    #define DEFAULT_bedKp 251.78
-    #define DEFAULT_bedKi  49.57
-    #define DEFAULT_bedKd 319.73
+    #define DEFAULT_bedKp 100.64
+    #define DEFAULT_bedKi  17.80
+    #define DEFAULT_bedKd 379.23
   #endif
 
   #if ENABLED(KNUTWURST_MEGA_X)
@@ -1044,8 +1044,8 @@
   #define X_DRIVER_TYPE  TMC2208_STANDALONE
   #define Y_DRIVER_TYPE  TMC2208_STANDALONE
   #define Z_DRIVER_TYPE  TMC2208_STANDALONE
-  #define E0_DRIVER_TYPE TMC2208_STANDALONE
-  #define E1_DRIVER_TYPE TMC2208_STANDALONE
+  #define E0_DRIVER_TYPE A4988
+  #define E1_DRIVER_TYPE A4988
 #else
   #if ENABLED(KNUTWURST_MEGA_P)
     #define X_DRIVER_TYPE  TMC2208_STANDALONE
@@ -1110,7 +1110,7 @@
 #endif
 
 #if ENABLED(KNUTWURST_MEGA_S)
-  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 384, 384 }
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 384, 384 }  //stock value = 384, testing 380 after https://www.thingiverse.com/thing:2806295
 #endif
 
 #if ENABLED(KNUTWURST_MEGA_X)
